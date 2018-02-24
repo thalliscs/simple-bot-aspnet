@@ -7,7 +7,7 @@ using System.Web;
 
 namespace SimpleBot
 {
-    public class UserSqlRepository : IUserSqlRepository
+    public class UserSqlRepository : IUserRepository
     {
         string _connectionString;
         public UserSqlRepository(string connectionString)

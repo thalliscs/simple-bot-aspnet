@@ -14,7 +14,7 @@ namespace SimpleBot
             _database = _client.GetDatabase("Bot");
         }
 
-        public UserProfile GetUserProfileById(string userId)
+        public UserProfile GetProfileById(string userId)
         {
             var col = _database.GetCollection<UserProfile>("profiles");
 

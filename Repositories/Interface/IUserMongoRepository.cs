@@ -11,6 +11,6 @@ namespace SimpleBot
 
         void SalvarUserProfile(string userId, UserProfile perfil);
 
-        UserProfile GetUserProfileById(string userId);
+        UserProfile GetProfileById(string userId);
     }
 }

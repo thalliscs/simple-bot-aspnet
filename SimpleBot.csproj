@@ -143,7 +143,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interface\IUserMemRepository.cs" />
     <Compile Include="Repositories\Interface\IUserMongoRepository.cs" />
-    <Compile Include="Repositories\Interface\IUserSqlRepository.cs" />
+    <Compile Include="Repositories\Interface\IUserRepository.cs" />
     <Compile Include="Repositories\UserMemRepository.cs" />
     <Compile Include="Repositories\UserMongoRepository.cs" />
     <Compile Include="Repositories\UserSqlRepository.cs" />

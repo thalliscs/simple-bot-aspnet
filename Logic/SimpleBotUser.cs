@@ -10,7 +10,7 @@ namespace SimpleBot
     public class SimpleBotUser
     {
         static IMongoClient _client = new MongoClient();
-        static IUserSqlRepository _userRepository = new UserSqlRepository(System.Configuration.ConfigurationManager.AppSettings["conexao"].ToString());
+        static IUserRepository _userRepository = new UserSqlRepository(System.Configuration.ConfigurationManager.AppSettings["conexao"].ToString());
         static IUserMongoRepository _userMongoRepository = new UserMongoRepository(_client);
         static IUserMemRepository _userMemRepository = new UserMemRepository();
 
@@ -40,7 +40,7 @@ namespace SimpleBot
         {
             string userId = message.Id;
 
-            var perfil = _userMongoRepository.GetUserProfileById(userId);
+            var perfil = _userMongoRepository.GetProfileById(userId);
 
             _userMongoRepository.SalvarUserProfile(userId, perfil);
 

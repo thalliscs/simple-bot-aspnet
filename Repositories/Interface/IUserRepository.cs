@@ -1,6 +1,6 @@
 ﻿namespace SimpleBot
 {
-    public interface IUserSqlRepository
+    public interface IUserRepository
     {
         void SalvarHistorico(Message message);
 
