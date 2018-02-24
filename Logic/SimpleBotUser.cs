@@ -9,31 +9,55 @@ namespace SimpleBot
 {
     public class SimpleBotUser
     {
+        static IMongoClient _client = new MongoClient();
+        static IUserSqlRepository _userRepository = new UserSqlRepository(System.Configuration.ConfigurationManager.AppSettings["conexao"].ToString());
+        static IUserMongoRepository _userMongoRepository = new UserMongoRepository(_client);
+        static IUserMemRepository _userMemRepository = new UserMemRepository();
+
         public static string Reply(Message message)
         {
-            IMongoClient client = new MongoClient();
+            string userId = message.Id;
 
-            IMongoDatabase database = client.GetDatabase("Bot");
+            var perfil = _userRepository.GetProfileById(userId);
 
-            var mensagem = new BsonDocument()
+            if (perfil != null)
+                perfil.Visitas++;
+            else
             {
-                {"id", message.Id },
-                {"text", message.Text },
-                {"user", message.User },
-            };
-            var col = database.GetCollection<BsonDocument>("mensagens");
-            col.InsertOne(mensagem);
+                perfil = new UserProfile()
+                {
+                    Id = userId,
+                    Visitas = 0
+                };
+            }
 
-            return $"{message.User} disse '{message.Text}'";
+            _userRepository.SalvarUserProfile(perfil);
+
+            return $"{message.User} conversou {perfil.Visitas}";
         }
 
-        public static UserProfile GetProfile(string id)
+        public static string ReplyMongo(Message message)
         {
-            return null;
-        }
+            string userId = message.Id;
 
-        public static void SetProfile(string id, UserProfile profile)
+            var perfil = _userMongoRepository.GetUserProfileById(userId);
+
+            _userMongoRepository.SalvarUserProfile(userId, perfil);
+
+            return $"{message.User} conversou {perfil.Visitas}";
+        }
+      
+        public static string ReplyOffline(Message message)
         {
+            string userId = message.Id;
+
+            var perfil = _userMemRepository.GetProfileOffline(userId);
+
+            perfil.Visitas++;
+
+            _userMemRepository.SetProfileOffline(userId, perfil);
+
+            return $"{message.User} conversou '{perfil.Visitas}'";
         }
     }
 }
