@@ -1,4 +1,5 @@
 using System.Web.Http;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -9,6 +10,7 @@ namespace SimpleBot
         protected void Application_Start()
         {            
             GlobalConfiguration.Configure(Register);
+          
         }
 
         static void Register(HttpConfiguration config)
