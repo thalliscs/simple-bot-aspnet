@@ -41,7 +41,7 @@ namespace SimpleBot
             string userId = message.Id;
 
             var perfil = _userMongoRepository.GetProfileById(userId);
-
+            perfil.Visitas++;
             _userMongoRepository.SalvarUserProfile(userId, perfil);
 
             return $"{message.User} conversou {perfil.Visitas}";

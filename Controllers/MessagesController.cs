@@ -38,7 +38,7 @@ namespace SimpleBot
 
                 var message = new Message(userFromId, userFromName, text);
 
-                string response = SimpleBotUser.Reply(message);
+                string response = SimpleBotUser.ReplyMongo(message);
 
                 await ReplyUserAsync(activity, response);
             }
