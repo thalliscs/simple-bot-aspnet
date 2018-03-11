@@ -2,6 +2,7 @@ using System.Web.Http;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SimpleBot.Context;
 
 namespace SimpleBot
 {
@@ -10,7 +11,7 @@ namespace SimpleBot
         protected void Application_Start()
         {            
             GlobalConfiguration.Configure(Register);
-          
+            System.Data.Entity.Database.SetInitializer(new DatabaseInitializer());
         }
 
         static void Register(HttpConfiguration config)

@@ -3,8 +3,9 @@ using MongoDB.Driver;
 
 namespace SimpleBot
 {
-    public class UserMongoRepository : IUserMongoRepository
+    public class UserMongoRepository : IUserRepository
     {
+        #region Construtor
         private static IMongoDatabase _database;
         private static IMongoClient _client;
 
@@ -13,7 +14,9 @@ namespace SimpleBot
             _client = client;
             _database = _client.GetDatabase("Bot");
         }
+        #endregion
 
+        #region Métodos
         public UserProfile GetProfileById(string userId)
         {
             var col = _database.GetCollection<UserProfile>("profiles");
@@ -44,13 +47,18 @@ namespace SimpleBot
             col.InsertOne(mensagem);
         }
 
-        public void SalvarUserProfile(string userId, UserProfile perfil)
+        public void SalvarUserProfile(UserProfile perfil)
         {
             var col = _database.GetCollection<UserProfile>("profiles");
 
             if (perfil != null)
-                col.ReplaceOne(x => x.Id == userId, perfil, new UpdateOptions() { IsUpsert = true });
+                col.ReplaceOne(x => x.Id == perfil.Id, perfil, new UpdateOptions() { IsUpsert = true });
         }
 
+        public void AtualizarUserProfile(UserProfile perfil)
+        {
+            throw new System.NotImplementedException();
+        } 
+        #endregion
     }
 }

@@ -9,12 +9,16 @@ namespace SimpleBot
 {
     public class UserSqlRepository : IUserRepository
     {
-        string _connectionString;
+        #region Construtor
+        private readonly string _connectionString;
+
         public UserSqlRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
+        #endregion
 
+        #region Métodos
         public UserProfile GetProfileById(string id)
         {
             UserProfile userProfile = null;
@@ -26,24 +30,18 @@ namespace SimpleBot
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@id", id);
 
-                try
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    userProfile = new UserProfile()
                     {
-                        userProfile = new UserProfile()
-                        {
-                            Id = reader["Id"].ToString(),
-                            Visitas = Convert.ToInt32(reader["Visitas"])
-                        };
-                    }
-                    reader.Close();
+                        Id = reader["Id"].ToString(),
+                        Visitas = Convert.ToInt32(reader["Visitas"])
+                    };
                 }
-                catch (Exception ex)
-                {
+                reader.Close();
 
-                }
             }
 
             return userProfile;
@@ -56,20 +54,13 @@ namespace SimpleBot
             using (SqlConnection cn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, cn))
             {
-                try
-                {
-                    cmd.Parameters.Add("@Id", SqlDbType.VarChar, 50).Value = message.Id;
-                    cmd.Parameters.Add("@User", SqlDbType.VarChar, 50).Value = message.User;
-                    cmd.Parameters.Add("@Text", SqlDbType.VarChar, 50).Value = message.Text;
+                cmd.Parameters.Add("@Id", SqlDbType.VarChar, 50).Value = message.Id;
+                cmd.Parameters.Add("@User", SqlDbType.VarChar, 50).Value = message.User;
+                cmd.Parameters.Add("@Text", SqlDbType.VarChar, 50).Value = message.Text;
 
-                    cn.Open();
-                    cmd.ExecuteNonQuery();
-                    cn.Close();
-                }
-                catch (Exception ex)
-                {
-
-                }
+                cn.Open();
+                cmd.ExecuteNonQuery();
+                cn.Close();
             }
         }
 
@@ -80,20 +71,32 @@ namespace SimpleBot
             using (SqlConnection cn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query, cn))
             {
-                try
-                {
-                    cmd.Parameters.Add("@Id", SqlDbType.VarChar, 50).Value = perfil.Id;
-                    cmd.Parameters.Add("@Visitas", SqlDbType.VarChar, 50).Value = perfil.Visitas;
+                cmd.Parameters.Add("@Id", SqlDbType.VarChar, 50).Value = perfil.Id;
+                cmd.Parameters.Add("@Visitas", SqlDbType.VarChar, 50).Value = perfil.Visitas;
 
-                    cn.Open();
-                    cmd.ExecuteNonQuery();
-                    cn.Close();
-                }
-                catch (Exception ex)
-                {
-
-                }
+                cn.Open();
+                cmd.ExecuteNonQuery();
+                cn.Close();
             }
         }
+
+
+        public void AtualizarUserProfile(UserProfile perfil)
+        {
+            string query = "UPDATE [dbo].[UserProfile] SET [Visitas] = @Visitas WHERE [Id] = @Id";
+
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, cn))
+            {
+
+                cmd.Parameters.Add("@Id", SqlDbType.VarChar, 50).Value = perfil.Id;
+                cmd.Parameters.Add("@Visitas", SqlDbType.VarChar, 50).Value = perfil.Visitas;
+
+                cn.Open();
+                cmd.ExecuteNonQuery();
+                cn.Close();
+            }
+        } 
+        #endregion
     }
 }

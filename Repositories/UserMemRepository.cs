@@ -5,11 +5,11 @@ using System.Web;
 
 namespace SimpleBot
 {
-    public class UserMemRepository : IUserMemRepository
+    public class UserMemRepository : IUserRepository
     {
         Dictionary<string, UserProfile> _perfil = new Dictionary<string, UserProfile>();
-
-        public UserProfile GetProfileOffline(string id)
+        
+        public UserProfile GetProfileById(string id)
         {
             if (_perfil.ContainsKey(id))
                 return _perfil[id];
@@ -23,12 +23,18 @@ namespace SimpleBot
 
         public void SalvarHistorico(Message message)
         {
-            
+            throw new NotImplementedException();
         }
 
-        public void SetProfileOffline(string id, UserProfile profile)
+        public void SalvarUserProfile(UserProfile perfil)
         {
-            _perfil[id] = profile;
+            _perfil[perfil.Id] = perfil;
         }
+
+        public void AtualizarUserProfile(UserProfile perfil)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

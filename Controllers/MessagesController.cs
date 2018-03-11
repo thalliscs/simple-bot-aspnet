@@ -16,9 +16,9 @@ namespace SimpleBot
         [ResponseType(typeof(void))]
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
-          
 
-            if ( activity != null && activity.Type == ActivityTypes.Message)
+
+            if (activity != null && activity.Type == ActivityTypes.Message)
             {
                 await HandleActivityAsync(activity);
             }
@@ -30,24 +30,15 @@ namespace SimpleBot
         // Estabelece comunicação entre o usuário e o SimpleBotUser
         async Task HandleActivityAsync(Activity activity)
         {
-            try
-            {
-                string text = activity.Text;
-                string userFromId = activity.From.Id;
-                string userFromName = activity.From.Name;
+            string text = activity.Text;
+            string userFromId = activity.From.Id;
+            string userFromName = activity.From.Name;
 
-                var message = new Message(userFromId, userFromName, text);
+            var message = new Message(userFromId, userFromName, text);
 
-                string response = SimpleBotUser.ReplyMongo(message);
+            string response = SimpleBotUser.ReplyEf(message);
 
-                await ReplyUserAsync(activity, response);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-           
+            await ReplyUserAsync(activity, response);
         }
 
         // Responde mensagens usando o Bot Framework Connector

@@ -7,5 +7,7 @@
         UserProfile GetProfileById(string id);
 
         void SalvarUserProfile(UserProfile perfil);
+
+        void AtualizarUserProfile(UserProfile perfil);
     }
 }
